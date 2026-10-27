@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>El sueldo no avanza, el impuesto sí · 08MBID</title>
+    <meta
+      name="description"
+      content="Dieciséis años de salarios, precios e IRPF en España, contados con datos del INE y de la Agencia Tributaria."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #fbfaf7;
+        --ink: #14130f;
+        --ink2: #55534c;
+        --rule: #d9d6cc;
+        --soft: #f1efe8;
+        --accent: #b3261e;
+        --blue: #2a78d6;
+        --orange: #eb6834;
+        --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+        --display: 'Playfair Display', Georgia, serif;
+        --sans: Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 64px;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: 19px/1.65 var(--serif);
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: inherit;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .read {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      /* barra de progreso */
+      #progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        width: 0;
+        background: var(--accent);
+        z-index: 60;
+      }
+
+      /* cabecera */
+      .masthead {
+        border-bottom: 3px double var(--ink);
+        text-align: center;
+        padding: 18px 20px 12px;
+      }
+      .masthead .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font: 500 12px var(--sans);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink2);
+      }
+      .brand {
+        font: 800 clamp(34px, 6vw, 60px) / 1 var(--display);
+        letter-spacing: -0.01em;
+        margin: 10px 0 2px;
+      }
+      .brand span {
+        color: var(--accent);
+      }
+      .tag {
+        font: italic 15px var(--serif);
+        color: var(--ink2);
+      }
+
+      /* menú */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--paper);
+        border-bottom: 1px solid var(--rule);
+      }
+      nav .wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      nav .links-nav {
+        display: flex;
+        gap: 2px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        flex: 1;
+        min-width: 0;
+      }
+      nav .links-nav::-webkit-scrollbar {
+        display: none;
+      }
+      nav a {
+        font: 500 13px var(--sans);
+        text-decoration: none;
+        white-space: nowrap;
+        padding: 16px 10px;
+        color: var(--ink2);
+        border-bottom: 2px solid transparent;
+      }
+      nav a:hover,
+      nav a.on {
+        color: var(--ink);
+        border-bottom-color: var(--accent);
+      }
+      .btn-pdf {
+        font: 600 13px var(--sans);
+        background: var(--ink);
+        color: var(--paper);
+        border: 0;
+        border-radius: 4px;
+        padding: 9px 14px;
+        cursor: pointer;
+        white-space: nowrap;
+        margin: 8px 0;
+      }
+      .btn-pdf:hover {
+        background: var(--accent);
+      }
+
+      /* portada */
+      .hero {
+        padding: 44px 0 18px;
+      }
+      .kicker {
+        font: 600 12px var(--sans);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      h1 {
+        font: 800 clamp(34px, 6.2vw, 66px) / 1.04 var(--display);
+        margin: 12px 0 14px;
+        letter-spacing: -0.015em;
+        max-width: 900px;
+      }
+      .dek {
+        font: 400 clamp(19px, 2.4vw, 24px) / 1.45 var(--serif);
+        color: var(--ink2);
+        max-width: 760px;
+        margin: 0 0 18px;
+      }
+      .byline {
+        font: 500 13px var(--sans);
+        color: var(--ink2);
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        padding: 10px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 22px;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        margin: 30px 0 8px;
+        border-top: 1px solid var(--ink);
+        border-bottom: 1px solid var(--rule);
+      }
+      .stat {
+        padding: 18px 18px 16px;
+        border-right: 1px solid var(--rule);
+      }
+      .stat:last-child {
+        border-right: 0;
+      }
+      .stat b {
+        display: block;
+        font: 800 clamp(28px, 4.2vw, 46px) / 1 var(--display);
+        white-space: nowrap;
+      }
+      .stat span {
+        font: 14px/1.35 var(--sans);
+        color: var(--ink2);
+        display: block;
+        margin-top: 8px;
+      }
+      .stat small {
+        font: 12px var(--sans);
+        color: var(--ink2);
+      }
+
+      /* secciones */
+      section {
+        padding: 46px 0 10px;
+        border-top: 1px solid var(--rule);
+      }
+      section:first-of-type {
+        border-top: 0;
+      }
+      h2 {
+        font: 800 clamp(27px, 4vw, 40px) / 1.12 var(--display);
+        margin: 6px 0 16px;
+        letter-spacing: -0.01em;
+      }
+      h3 {
+        font: 600 18px/1.3 var(--sans);
+        margin: 0;
+      }
+      .sec-n {
+        font: 600 12px var(--sans);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      p {
+        margin: 0 0 1.1em;
+        text-align: justify;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+      }
+      .dek {
+        text-align: left;
+        hyphens: none;
+      }
+      .lead::first-letter {
+        font: 800 4.1em/0.8 var(--display);
+        float: left;
+        padding: 6px 10px 0 0;
+        color: var(--accent);
+      }
+      ul.clean {
+        padding-left: 1.1em;
+      }
+      ul.clean li {
+        margin-bottom: 0.4em;
+      }
+
+      /* ficha */
+      .ficha {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 0;
+        border: 1px solid var(--ink);
+        margin: 10px 0 20px;
+        font: 15px/1.45 var(--sans);
+      }
+      .ficha div {
+        padding: 14px 16px;
+        border-right: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+      }
+      .ficha dt {
+        font: 600 11px var(--sans);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink2);
+        margin-bottom: 4px;
+      }
+      .ficha dd {
+        margin: 0;
+      }
+      .ficha .pend {
+        background: #fff7d6;
+        padding: 0 4px;
+        border-radius: 2px;
+      }
+
+      /* tarjetas objetivo/mensaje/público */
+      .trio {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin: 22px 0;
+      }
+      .card {
+        background: var(--soft);
+        padding: 18px 20px;
+        border-top: 3px solid var(--ink);
+      }
+      .card h3 {
+        margin-bottom: 8px;
+      }
+      .card p {
+        font: 16px/1.55 var(--sans);
+        margin: 0;
+        color: var(--ink2);
+        text-align: left;
+        hyphens: none;
+      }
+      .ficha a {
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .ficha a:hover {
+        color: var(--ink);
+      }
+
+      /* figuras */
+      .fig {
+        margin: 34px 0;
+        padding: 0;
+      }
+      .fig-head {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+      .fig-n {
+        font: 700 12px var(--sans);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        white-space: nowrap;
+      }
+      .ph {
+        border: 2px dashed var(--rule);
+        background: repeating-linear-gradient(
+          45deg,
+          #faf9f5,
+          #faf9f5 12px,
+          #f4f2ea 12px,
+          #f4f2ea 24px
+        );
+        min-height: 290px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 26px 24px;
+        gap: 10px;
+      }
+      .ph .tool {
+        font: 600 11px var(--sans);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 4px 9px;
+        border-radius: 3px;
+      }
+      .ph p {
+        font: italic 17px/1.5 var(--serif);
+        color: var(--ink2);
+        max-width: 600px;
+        margin: 0;
+        text-align: center;
+        hyphens: none;
+      }
+      figcaption {
+        font: 13px/1.5 var(--sans);
+        color: var(--ink2);
+        margin-top: 8px;
+      }
+      .fig-img {
+        display: none;
+      }
+      .wide {
+        max-width: 1040px;
+      }
+
+      /* recuadros */
+      .box {
+        border: 1px solid var(--ink);
+        padding: 22px 24px;
+        margin: 30px 0;
+        background: #fff;
+      }
+      .box h3 {
+        font: 700 13px var(--sans);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .box p,
+      .box li {
+        font: 16px/1.6 var(--sans);
+      }
+      .box.cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 28px;
+      }
+      .pull {
+        font: italic 600 clamp(24px, 3.4vw, 34px) / 1.25 var(--display);
+        border-left: 4px solid var(--accent);
+        padding: 4px 0 4px 20px;
+        margin: 34px 0;
+        color: var(--ink);
+      }
+
+      /* tablas */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font: 15px/1.45 var(--sans);
+        margin: 12px 0 24px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--rule);
+        vertical-align: top;
+      }
+      th {
+        font: 600 11px var(--sans);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink2);
+        border-bottom: 2px solid var(--ink);
+      }
+
+      /* enlaces */
+      .links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 14px;
+        margin: 18px 0;
+      }
+      .link {
+        display: block;
+        border: 1px solid var(--rule);
+        padding: 14px 16px;
+        text-decoration: none;
+        background: #fff;
+        font: 15px/1.4 var(--sans);
+      }
+      .link:hover {
+        border-color: var(--ink);
+      }
+      .link b {
+        display: block;
+        margin-bottom: 3px;
+      }
+      .link .cta {
+        display: block;
+        width: fit-content;
+        margin-top: 8px;
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .link:hover .cta {
+        color: var(--ink);
+      }
+      .fuentes td a {
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .pend {
+        background: #fff7d6;
+        padding: 0 4px;
+        border-radius: 2px;
+      }
+
+      footer {
+        margin-top: 60px;
+        border-top: 3px double var(--ink);
+        padding: 24px 0 60px;
+        font: 13px/1.6 var(--sans);
+        color: var(--ink2);
+      }
+
+      @media (max-width: 760px) {
+        body {
+          font-size: 18px;
+        }
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        .stat {
+          border-right: 0;
+          border-bottom: 1px solid var(--rule);
+        }
+        .box.cols {
+          grid-template-columns: 1fr;
+        }
+        .masthead .top span:nth-child(2) {
+          display: none;
+        }
+        th,
+        td {
+          padding: 8px 6px;
+        }
+        table {
+          display: block;
+          overflow-x: auto;
+        }
+        .wide table a {
+          word-break: break-word;
+        }
+      }
+
+      /* ---------- Impresión / PDF ---------- */
+      @page {
+        size: A4;
+        margin: 16mm 15mm;
+      }
+      @media print {
+        body {
+          font-size: 11pt;
+          line-height: 1.5;
+          background: #fff;
+        }
+        #progress,
+        nav,
+        .btn-pdf,
+        .noprint {
+          display: none !important;
+        }
+        html {
+          scroll-behavior: auto;
+        }
+        .wrap {
+          max-width: none;
+          padding: 0;
+        }
+        .hero {
+          padding-top: 8px;
+        }
+        section {
+          padding-top: 18px;
+          break-inside: auto;
+          break-before: page;      /* cada sección empieza en una hoja nueva */
+          border-top: 0;
+        }
+        .salto {
+          break-before: page;      /* salto manual: añade class="salto" a cualquier bloque */
+        }
+        h2,
+        h3 {
+          break-after: avoid;
+        }
+        .fig,
+        .box,
+        .card,
+        .stat,
+        table,
+        .ficha {
+          break-inside: avoid;
+        }
+        .ph {
+          min-height: 180px;
+          background: none;
+        }
+        .fig-img:not([src='']) {
+          display: block;
+          width: 100%;
+        }
+        .fig-img:not([src='']) + .fig-live {
+          display: none !important;
+        }
+        .card,
+        .box {
+          background: none;
+        }
+        .link {
+          border: 0;
+          padding: 4px 0;
+        }
+        .link .cta {
+          display: none;
+        }
+        .link::after {
+          content: attr(href);
+          display: block;
+          font-size: 8pt;
+          color: #55534c;
+          word-break: break-all;
+        }
+        .fuentes td a::after {
+          content: attr(href);
+          display: block;
+          font-size: 8pt;
+          color: #55534c;
+          word-break: break-all;
+        }
+        .ficha a::after {
+          content: attr(href);
+          display: block;
+          font-size: 8pt;
+          color: #55534c;
+          word-break: break-all;
+        }
+        .sec-n {
+          break-after: avoid;
+        }
+        a {
+          text-decoration: none;
+        }
+        footer {
+          margin-top: 16px;
+          padding: 10px 0 0;
+          break-inside: avoid;
+          font-size: 9pt;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="progress"></div>
+
+    <header class="masthead" id="inicio">
+      <div class="top">
+        <span>Periodismo de datos</span><span id="fecha">Octubre de 2026</span
+        ><span>Edición especial · Trabajo práctico</span>
+      </div>
+      <div class="brand">El dato<span>.</span></div>
+      <div class="tag">
+        Sin datos, tan solo tienes una opinión.
+      </div>
+    </header>
+
+    <nav aria-label="Secciones">
+      <div class="wrap">
+        <div class="links-nav">
+          <a href="#inicio">Portada</a>
+          <a href="#trabajo">El trabajo</a>
+          <a href="#salarios">Salarios y precios</a>
+          <a href="#quien-cobra">Quién cobra qué</a>
+          <a href="#irpf">El IRPF</a>
+          <a href="#territorio">Territorio</a>
+          <a href="#coste">El coste</a>
+          <a href="#metodo">Método</a>
+          <a href="#datos">Fuentes</a>
+        </div>
+        <button
+          class="btn-pdf"
+          onclick="imprimir()"
+          title="Se abre el diálogo de impresión: elige «Guardar como PDF»"
+        >
+          Imprimir en PDF
+        </button>
+      </div>
+    </nav>
+
+    <main class="wrap">
+      <!-- ===================== PORTADA ===================== -->
+      <div class="hero">
+        <div class="kicker">
+          Reportaje de investigación · Salarios, inflación e IRPF
+        </div>
+        <h1>El sueldo no avanza,</br> el impuesto sí</h1>
+        <p class="dek">
+          Dieciséis años de nóminas, precios y declaraciones de la renta en
+          España, contados con los datos del INE y de la Agencia Tributaria.
+        </p>
+        <div class="byline">
+          <span>Por <strong>Jose Fulgencio Soriano García</strong></span>
+          <span>08MBID · Visualización de Datos</span>
+          <span>Octubre de 2026</span>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <b>+35,0&nbsp;%</b
+            ><span>Lo que ha subido el salario medio entre 2008 y 2024</span
+            ><small>Mediana: +34,3&nbsp;%</small>
+          </div>
+          <div class="stat">
+            <b>+33,5&nbsp;%</b
+            ><span>Lo que han subido los precios (IPC) en el mismo periodo</span
+            ><small>Media anual del índice general</small>
+          </div>
+          <div class="stat">
+            <b>18,9 → 21,8&nbsp;%</b
+            ><span
+              >Tipo medio del IRPF, de 2015 a 2024, en las declaraciones de toda
+              España</span
+            ><small>Cuota íntegra / base liquidable</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================== EL TRABAJO ===================== -->
+      <section id="trabajo">
+        <div class="read">
+          <div class="sec-n">El trabajo</div>
+          <h2>Si el sueldo sube con los precios, ¿por qué llega para menos?</h2>
+          <p class="lead">
+            Es la pregunta que se hace casi cualquier asalariado, y este
+            reportaje intenta responderla con datos oficiales. Para hacerlo
+            seguimos a un trabajador típico: el que cobra el
+            <strong>sueldo mediano</strong>, es decir, el que está justo en el
+            medio, con la mitad de los asalariados por encima y la otra mitad
+            por debajo.
+          </p>
+          <p>
+            Entre 2008 y 2024, ese sueldo bruto subió <strong>un 34,3&nbsp;%</strong>
+            y los precios, un 33,5&nbsp;%. Los pagadores, por tanto, han subido
+            los sueldos al ritmo de la inflación, e incluso un poco por encima.
+          </p>
+          <p>
+            Lo que cambia es cuánto se queda Hacienda. Calculamos el IRPF de
+            este trabajador desde 2015, el primer año con las reglas actuales
+            del impuesto. Entre 2015 y 2024 su sueldo bruto subió un
+            25,8&nbsp;% y los precios, un 23,5&nbsp;%. Pero lo que le llega a
+            la cuenta solo creció un <strong>22,0&nbsp;%</strong>, menos que los
+            precios. La diferencia se la ha llevado Hacienda.
+          </p>
+          <p>
+            El motivo es sencillo. El IRPF cobra un porcentaje mayor cuanto más
+            se gana, por tramos, y esos tramos son prácticamente los mismos
+            desde 2016. Cuando el sueldo sube solo para seguir el ritmo de los
+            precios, Hacienda lo trata como si fuéramos más ricos y se queda con
+            una parte mayor. Si los tramos hubieran subido con la inflación, ese
+            mismo trabajador habría pagado en 2024
+            <strong>unos 554&nbsp;euros menos</strong>, y lo que le llega a la
+            cuenta habría crecido un 25,4&nbsp;%, por encima de los precios.
+            Habría ganado poder de compra en lugar de perderlo. Ninguno de los
+            gobiernos de estos años ha hecho esa actualización.
+          </p>
+          <p>
+            En las secciones siguientes lo comprobamos paso a paso: primero los
+            sueldos frente a los precios, después quién cobra qué, cómo
+            funciona el IRPF, qué ha pasado en cada comunidad y, por último,
+            cuánto nos cuesta.
+          </p>
+        </div>
+
+        <dl class="ficha">
+          <div>
+            <dt>Autor/a</dt>
+            <dd>Jose Fulgencio<br />Soriano García</dd>
+          </div>
+          <div>
+            <dt>Universidad</dt>
+            <dd>Universidad Internacional de Valencia (VIU)</dd>
+          </div>
+          <div>
+            <dt>Máster</dt>
+            <dd>Máster en Big Data y ciencia de datos</dd>
+          </div>
+          <div>
+            <dt>Asignatura</dt>
+            <dd>08MBID · Visualización de Datos</dd>
+          </div>
+          <div>
+            <dt>Trabajo</dt>
+            <dd>Trabajo Práctico (20&nbsp;% de la nota)</dd>
+          </div>
+          <div>
+            <dt>Convocatoria</dt>
+            <dd>[Convocatoria y fecha de entrega]</dd>
+          </div>
+          <div>
+            <dt>Web del trabajo</dt>
+            <dd>
+              <a
+                href="https://stackblitz.com/edit/stackblitz-starters-czxtgejc?file=index.html"
+                target="_blank"
+                rel="noopener"
+                >Ver la web en StackBlitz</a
+              >
+            </dd>
+          </div>
+          <div>
+            <dt>Repositorio</dt>
+            <dd>
+              <a
+                href="https://github.com/sortaria24-max/08MBID_TrabajoPractico"
+                target="_blank"
+                rel="noopener"
+                >Ver el repositorio en GitHub</a
+              >
+            </dd>
+          </div>
+        </dl>
+
+        <div class="trio">
+          <div class="card">
+            <h3>Objetivo</h3>
+            <p>
+              Medir, con datos oficiales, cuánto poder de compra pierde un
+              asalariado porque los tramos del IRPF no suben con los precios.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Mensaje</h3>
+            <p>
+              Las empresas han subido los sueldos al ritmo de los precios, pero
+              los tramos del IRPF no se han actualizado. Cada año pagamos más
+              impuestos y el resultado es que perdemos poder de compra.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Público al que va dirigido</h3>
+            <p>
+              Cualquier persona que cobre una nómina, o conviva con alguien que
+              la cobre, sin conocimientos de economía ni de fiscalidad.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SALARIOS Y PRECIOS ===================== -->
+      <section id="salarios">
+        <div class="read">
+          <div class="sec-n">1 · Salarios y precios</div>
+          <h2>Los sueldos han seguido el ritmo de los precios</h2>
+          <p>
+            Empezamos por lo básico: ¿han subido los sueldos lo mismo que la
+            vida? Para medir lo que sube la vida se usa el
+            <strong>IPC</strong>, el índice de precios que calcula el INE con
+            lo que gastamos cada mes: la compra, la luz, el alquiler, la
+            gasolina…
+          </p>
+          <p>
+            Entre 2008 y 2024 el salario medio subió un 35,0&nbsp;% y el
+            mediano, un 34,3&nbsp;%. Los precios subieron un 33,5&nbsp;%. Es
+            decir, <strong>las empresas han subido los sueldos al mismo ritmo
+            que la inflación</strong>, con un pequeño margen a favor.
+          </p>
+          <p>
+            El gráfico muestra, año a año, cuánto había subido cada cosa desde
+            2008. Cuando la línea del sueldo va por encima de la de los precios,
+            el sueldo da para más; cuando va por debajo, da para menos.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig1">
+          <div class="fig-head">
+            <span class="fig-n">Figura 1</span>
+            <h3>
+              Salario medio, salario mediano e IPC, 2008-2024 (variación
+              acumulada desde 2008)
+            </h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 1: variación acumulada del salario medio, el salario mediano y el IPC desde 2008"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura1.png"
+          />
+          <div class="fig-live">
+            <iframe
+              title="Figura 1: variación acumulada del salario medio, el salario mediano y el IPC desde 2008"
+              aria-label="Líneas"
+              id="datawrapper-chart-F2DlL"
+              src="https://datawrapper.dwcdn.net/F2DlL/2/"
+              scrolling="no"
+              frameborder="0"
+              style="width: 0; min-width: 100% !important; border: none"
+              height="388"
+              data-external="1"
+            ></iframe>
+            <script type="text/javascript">
+              (function () {
+                function e() {
+                  window.addEventListener('message', function (e) {
+                    if (e.data['datawrapper-height'] !== void 0) {
+                      var t = document.querySelectorAll('iframe');
+                      for (var n in e.data['datawrapper-height'])
+                        for (var r = 0, i; (i = t[r]); r++)
+                          if (i.contentWindow === e.source) {
+                            var a = e.data['datawrapper-height'][n] + 'px';
+                            i.style.height = a;
+                          }
+                    }
+                  });
+                }
+                e();
+              })();
+            </script>
+          </div>
+          <figcaption>
+            Fuente: INE, Encuesta Anual de Estructura Salarial (tabla 28191) e
+            IPC (tabla 50913). Elaboración propia.
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            El camino no fue recto. Entre 2011 y 2019, con la crisis y los años
+            siguientes, los precios fueron por delante de los sueldos. En 2020 y
+            2021 los sueldos se adelantaron; en 2022 y 2023 la inflación volvió
+            a pasarles por delante, y en 2024 los sueldos recuperan la ventaja
+            por poco. Usamos todo el periodo disponible y no un tramo solamente,
+            para que se vea la evolución completa y la información no quede
+            sesgada.
+          </p>
+          <p>
+            En resumen, el sueldo bruto, el que aparece arriba en la nómina, ha
+            seguido a los precios. La pregunta es qué pasa con lo que queda
+            después de impuestos, y para responderla primero hay que saber
+            quién cobra qué.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== QUIÉN COBRA QUÉ ===================== -->
+      <section id="quien-cobra">
+        <div class="read">
+          <div class="sec-n">2 · Quién cobra qué</div>
+          <h2>El «sueldo medio» no lo cobra casi nadie</h2>
+          <p>
+            Cuando se habla del «sueldo medio» parece que es lo que cobra un
+            trabajador normal, pero no es así. La media suma todos los sueldos y
+            los reparte a partes iguales, y unos pocos sueldos muy altos la
+            empujan hacia arriba. Por eso en este reportaje usamos sobre todo la
+            <strong>mediana</strong>: si ponemos a todos los asalariados en
+            fila, de menor a mayor sueldo, es lo que cobra el que queda justo en
+            el centro. En 2024 la mediana era de 24.497&nbsp;€ brutos al año y
+            la media, de 29.540&nbsp;€: unos 5.000&nbsp;€ más.
+          </p>
+          <p>
+            El gráfico muestra esa fila año a año. Cada franja de color es un
+            grupo de asalariados, y el número que lleva dentro es el porcentaje
+            de trabajadores que reúne. Al pasar el ratón por un año se ven los
+            euros que separan cada grupo.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig2">
+          <div class="fig-head">
+            <span class="fig-n">Figura 2</span>
+            <h3>La distribución de los salarios en España</h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 2: abanico de percentiles del salario bruto anual en España, 2008-2024, con la media y la mediana"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura2.png"
+          />
+          <div class="fig-live">
+            <!-- Gráfico generado con Python (Plotly): notebooks/TP_08MBID_figura2.ipynb -->
+            <iframe
+              title="Figura 2: abanico de percentiles del salario bruto anual en España, 2008-2024, con la media y la mediana"
+              src="figura2.html"
+              scrolling="no"
+              frameborder="0"
+              style="width: 100%; border: none"
+              height="560"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: INE, Encuesta Anual de Estructura Salarial (tabla 28191).
+            Total nacional, ambos sexos, todas las jornadas. Elaboración propia
+            con Python y Plotly (<a
+              href="https://github.com/sortaria24-max/08MBID_TrabajoPractico/blob/main/notebooks/TP_08MBID_figura2.ipynb"
+              target="_blank"
+              rel="noopener"
+              >cuaderno de la figura</a
+            >).
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            La lectura es sencilla: en 2024,
+            <strong>tres de cada cuatro asalariados cobran menos de
+            37.000&nbsp;€ brutos al año</strong>, y la mitad cobra menos de
+            24.497&nbsp;€. Las franjas de arriba son mucho más anchas que las de
+            abajo: reúnen a la misma cantidad de gente, pero con sueldos muy
+            distintos entre sí. Esos sueldos altos son los que tiran de la media
+            hacia arriba, y por eso la línea de la media va siempre por encima
+            de la de la mediana. Para saber cuánto cobra un trabajador típico,
+            la mediana es la cifra más fiel.
+          </p>
+        </div>
+
+        <div class="read">
+          <p>
+            Otra forma de verlo es medir los sueldos con la vara del salario
+            mínimo (SMI). El gráfico siguiente muestra qué parte de los
+            asalariados cobra menos de un salario mínimo, entre uno y dos, entre
+            dos y tres, y así sucesivamente. Hay que tener en cuenta que la vara
+            cambia cada año, porque el salario mínimo sube.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig3">
+          <div class="fig-head">
+            <span class="fig-n">Figura 3</span>
+            <h3>
+              Trabajadores según su sueldo en múltiplos del Salario Mínimo (SMI)
+            </h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 3: porcentaje de asalariados por tramos de salario mínimo, 2008-2024"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura3.png"
+          />
+          <div class="fig-live">
+            <iframe
+              title="Figura 3: porcentaje de asalariados por tramos de salario mínimo, 2008-2024"
+              aria-label="Columnas apiladas"
+              id="datawrapper-chart-aB8ec"
+              src="https://datawrapper.dwcdn.net/aB8ec/2/"
+              scrolling="no"
+              frameborder="0"
+              style="width: 0; min-width: 100% !important; border: none"
+              height="359"
+              data-external="1"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: INE, Encuesta Anual de Estructura Salarial (tabla 28182).
+            Todas las jornadas. El SMI sube cada año, así que un mismo tramo no
+            equivale a los mismos euros en todos los años.
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            Hasta 2018 el reparto apenas cambia. En 2019 el salario mínimo sube
+            de golpe un 22&nbsp;%, de 735,90 a 900&nbsp;€ al mes, y el gráfico da
+            un salto. No es que se cobre menos: es que la vara se ha alargado.
+            El resultado es que en 2024
+            <strong>dos de cada tres asalariados (el 67&nbsp;%) cobran menos de
+            dos salarios mínimos</strong>, unos 31.750&nbsp;€ brutos al año; en
+            2008 eran el 43&nbsp;%. Casi uno de cada cinco cobra menos de un
+            salario mínimo al año: son, sobre todo, personas con jornada parcial
+            o que no han trabajado el año entero.
+          </p>
+          <p>
+            Este es el trabajador que seguimos en el resto del reportaje: el de
+            sueldo mediano, que en 2024 cobraba 24.497&nbsp;€ brutos. Ahora toca
+            ver cuánto de ese sueldo se queda Hacienda.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== IRPF ===================== -->
+      <section id="irpf">
+        <div class="read">
+          <div class="sec-n">3 · El IRPF</div>
+          <h2>Cómo funciona el IRPF y por qué pagamos más</h2>
+          <p>
+            El IRPF es el impuesto que Hacienda descuenta cada mes de la nómina.
+            Funciona por <strong>tramos</strong>, como una escalera: los primeros
+            euros del sueldo no pagan nada, los siguientes pagan un poco y,
+            cuanto más se gana, más alto es el porcentaje que pagan los euros
+            de arriba.
+          </p>
+          <p>
+            Los límites de cada escalón están fijados en euros. Si no se suben
+            con la inflación, un sueldo que solo sube para seguir a los precios
+            va subiendo escalones y paga un porcentaje mayor, aunque con él no
+            se pueda comprar más que antes.
+          </p>
+          <p>
+            El gráfico siguiente lo muestra con nóminas concretas. Cada escalón
+            gris es un tramo, y su altura es el porcentaje que paga cada euro
+            que cae en él. Con los botones se elige un sueldo: la parte
+            coloreada es lo que paga en cada tramo, en euros. Debajo de cada
+            salto de escalón aparece, en gris, el sueldo bruto anual con el que
+            se llega a él.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig4">
+          <div class="fig-head">
+            <span class="fig-n">Figura 4</span>
+            <h3>Los tramos del IRPF, explicados con una nómina</h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 4: escala del IRPF de 2024 y parte de la base liquidable de un asalariado que cae en cada tramo"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura4.png"
+          />
+          <div class="fig-live">
+            <!-- Gráfico generado con Python (Plotly): notebooks/TP_08MBID_figura4.ipynb -->
+            <iframe
+              title="Figura 4: escala del IRPF de 2024 y parte de la base liquidable de un asalariado que cae en cada tramo"
+              src="figura4.html"
+              scrolling="no"
+              frameborder="0"
+              style="width: 100%; border: none"
+              height="600"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: Ley 35/2006 del IRPF, escala general de 2024. Elaboración
+            propia con Python (Plotly) y el modelo fiscal del repositorio (<a
+              href="https://github.com/sortaria24-max/08MBID_TrabajoPractico/blob/main/notebooks/TP_08MBID_figura4.ipynb"
+              target="_blank"
+              rel="noopener"
+              >cuaderno de la figura</a
+            >). Asalariado soltero, sin otras rentas; escala autonómica igual a
+            la estatal.
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            Lo primero que se ve es que nadie paga el porcentaje de su tramo
+            sobre todo el sueldo. El trabajador mediano llega al escalón del
+            30&nbsp;%, que empieza con un sueldo de 23.736&nbsp;€ brutos, solo
+            761&nbsp;€ por debajo del suyo. Por eso solo 712&nbsp;€ de su sueldo
+            pagan ese porcentaje.
+            El resto paga el 19 o el 24&nbsp;%, y una parte no paga nada. En
+            total, su IRPF es de 3.385&nbsp;€ al año: el 13,8&nbsp;% de su
+            sueldo bruto. Quien cobra el salario mínimo no paga IRPF.
+          </p>
+        </div>
+
+        <div class="read">
+          <div class="box">
+            <h3>El debate: ¿hay que actualizar el IRPF con la inflación?</h3>
+            <p>
+              Subir los tramos y las cantidades que no pagan impuesto al mismo
+              ritmo que los precios se llama <strong>deflactar</strong> el IRPF.
+              Es una decisión política y hay argumentos a los dos lados.
+            </p>
+            <p>
+              <strong>A favor:</strong> evita que una subida de sueldo que solo
+              compensa los precios acabe en más impuestos sin haber ganado
+              poder de compra.
+            </p>
+            <p>
+              <strong>En contra:</strong> Hacienda recauda menos, y quien más
+              cobra es quien más se ahorra. Algunos años se han hecho ajustes
+              para los sueldos más bajos, que nuestro cálculo sí tiene en
+              cuenta.
+            </p>
+            <p>
+              Este reportaje no entra en ese debate: <strong>mide</strong> lo
+              que nos cuesta que no se haya hecho.
+            </p>
+          </div>
+        </div>
+
+        <div class="read">
+          <p>
+            ¿Qué parte de la nómina llega de verdad a la cuenta? El gráfico
+            siguiente lo muestra para sueldos de 10.000 a 100.000&nbsp;€ brutos
+            al año. De abajo arriba: lo que llega a la cuenta, lo que se lleva
+            la Seguridad Social y lo que se lleva el IRPF. Con los botones se
+            cambia de año, y al pasar el ratón se ven los euros de cada parte.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig5">
+          <div class="fig-head">
+            <span class="fig-n">Figura 5</span>
+            <h3>De la nómina bruta a lo que llega a la cuenta</h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 5: reparto del sueldo bruto entre Seguridad Social, IRPF y neto, de 10.000 a 100.000 euros"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura5.png"
+          />
+          <div class="fig-live">
+            <!-- Gráfico generado con Python (Plotly): notebooks/TP_08MBID_figura5.ipynb -->
+            <iframe
+              title="Figura 5: reparto del sueldo bruto entre Seguridad Social, IRPF y neto, de 10.000 a 100.000 euros"
+              src="figura5.html"
+              scrolling="no"
+              frameborder="0"
+              style="width: 100%; border: none"
+              height="600"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: elaboración propia con Python (Plotly) y el modelo fiscal
+            del repositorio (<a
+              href="https://github.com/sortaria24-max/08MBID_TrabajoPractico/blob/main/notebooks/TP_08MBID_figura5.ipynb"
+              target="_blank"
+              rel="noopener"
+              >cuaderno de la figura</a
+            >). Asalariado soltero, sin otras rentas; escala autonómica igual a
+            la estatal.
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            La Seguridad Social se lleva casi lo mismo a todos, un 6,5&nbsp;%
+            del sueldo. El IRPF, en cambio, crece con el sueldo: quien cobra el
+            salario mínimo no paga nada y, a partir de ahí, la franja naranja
+            no deja de ensancharse. El trabajador mediano recibe en su cuenta el
+            79,7&nbsp;% de su sueldo bruto; con 50.000&nbsp;€, el 71,1&nbsp;%, y
+            con 100.000&nbsp;€, el 64,0&nbsp;%.
+          </p>
+          <p>
+            Al cambiar de año se ve lo importante: entre 2015 y 2024, el IRPF
+            del trabajador mediano pasa del 11,4&nbsp;% al 13,8&nbsp;% de su
+            sueldo, aunque ese sueldo solo ha seguido a los precios.
+          </p>
+        </div>
+
+        <div class="read">
+          <div class="pull">
+            «El tipo medio del IRPF en las declaraciones de toda España pasó del
+            18,9&nbsp;% en 2015 al 21,8&nbsp;% en 2024.»
+          </div>
+          <p>
+            No es solo nuestro cálculo. Según la Agencia Tributaria, el
+            porcentaje medio que se paga de IRPF en todas las declaraciones de
+            España ha subido casi tres puntos en esos años. Ese dato mezcla a
+            todo tipo de contribuyentes y de ingresos, así que no sirve para
+            medir lo que paga un asalariado concreto, pero cuenta lo mismo:
+            <strong>el IRPF se lleva cada año una parte mayor de lo que se
+            gana</strong>.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== TERRITORIO ===================== -->
+      <section id="territorio">
+        <div class="read">
+          <div class="sec-n">4 · Territorio</div>
+          <h2>No todos los sueldos, ni todos los precios, son iguales</h2>
+          <p>
+            Los precios no han subido igual en todas las comunidades, y los
+            sueldos tampoco. Para saber dónde se ha ganado o perdido poder de
+            compra, comparamos el salario de cada comunidad con
+            <strong>su propio IPC</strong>.
+          </p>
+          <p>
+            El mapa colorea cada comunidad según cuánto ha cambiado su salario
+            medio entre 2008 y 2024 una vez descontada la inflación. En azul,
+            las que hoy pueden comprar más con su sueldo que en 2008; en rojo,
+            las que pueden comprar menos. Cuanto más intenso es el color, mayor
+            es la diferencia. Al pasar el ratón por encima se ven el sueldo de
+            cada año, la subida del salario y la de los precios.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig6">
+          <div class="fig-head">
+            <span class="fig-n">Figura 6</span>
+            <h3>El sueldo de 7 comunidades compra hoy menos que en 2008</h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 6: variación del salario real por comunidad autónoma, 2008-2024"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura6.png"
+          />
+          <div class="fig-live">
+            <iframe
+              title="El sueldo de 7 comunidades compra hoy menos que en 2008"
+              aria-label="Mapa coroplético"
+              id="datawrapper-chart-ve537"
+              src="https://datawrapper.dwcdn.net/ve537/1/"
+              scrolling="no"
+              frameborder="0"
+              style="width: 0; min-width: 100% !important; border: none"
+              height="523"
+              data-external="1"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: INE, EAES (tabla 28191) e IPC por comunidades (tabla 50913).
+            Salario real = salario medio bruto descontado el IPC de la propia
+            comunidad.
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            La media nacional apenas se mueve, un 1,1&nbsp;% más de poder de
+            compra en dieciséis años, pero esconde dos Españas. Canarias
+            (+6,3&nbsp;%), Baleares (+5,8&nbsp;%) y Murcia (+5,6&nbsp;%) son las
+            que más ganan. En el otro extremo, Castilla y León (−4,0&nbsp;%),
+            Andalucía (−2,6&nbsp;%) y Aragón (−2,0&nbsp;%) encabezan las siete
+            comunidades cuyo sueldo compra hoy menos que en 2008. Cataluña
+            también está en ese grupo: sus sueldos subieron un 35,7&nbsp;%, pero
+            sus precios, un 36,5&nbsp;%, la mayor subida de todas.
+          </p>
+          <p>
+            Ganar poder de compra no es lo mismo que cobrar más. Canarias
+            encabeza el mapa porque sus precios fueron los que menos subieron
+            (27,9&nbsp;%), pero su salario medio, 25.120&nbsp;€, sigue entre los
+            más bajos del país, lejos de los 34.410&nbsp;€ de Madrid.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== EL COSTE ===================== -->
+      <section id="coste">
+        <div class="read">
+          <div class="sec-n">5 · El coste</div>
+          <h2>Cuánto cuesta no actualizar la tarifa</h2>
+          <p>
+            Calculamos el IRPF que pagaría la misma persona si la tarifa, los
+            mínimos y los gastos se hubieran actualizado con el IPC desde 2016,
+            y lo comparamos con el real. Con el salario mediano de 2024, el IRPF
+            real es de unos 3.385 € (el 13,8&nbsp;% del bruto) y el del
+            escenario actualizado, de unos 2.830 €:
+            <strong>unos 554 € de diferencia</strong>. Con el salario medio, la
+            diferencia es de unos 828 €. Es una estimación con supuestos
+            explícitos, explicados en la sección de método.
+          </p>
+          <p>
+            El gráfico siguiente lo muestra año a año: la línea naranja es el
+            IRPF real; la azul discontinua, el que se pagaría con la tarifa
+            actualizada, y la franja entre las dos, lo que se paga de más. Con
+            los botones se cambia de contribuyente.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig7">
+          <div class="fig-head">
+            <span class="fig-n">Figura 7</span>
+            <h3>
+              IRPF real frente a IRPF con la tarifa actualizada con el IPC
+            </h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 7: IRPF real frente a IRPF con la tarifa actualizada con el IPC, 2015-2024"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura7.png"
+          />
+          <div class="fig-live">
+            <!-- Gráfico generado con Python (Plotly): notebooks/TP_08MBID_figura7.ipynb -->
+            <iframe
+              title="Figura 7: IRPF real frente a IRPF con la tarifa actualizada con el IPC, 2015-2024"
+              src="figura7.html"
+              scrolling="no"
+              frameborder="0"
+              style="width: 100%; border: none"
+              height="600"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: elaboración propia con Python (Plotly) y el modelo fiscal
+            del repositorio (<a
+              href="https://github.com/sortaria24-max/08MBID_TrabajoPractico/blob/main/notebooks/TP_08MBID_figura7.ipynb"
+              target="_blank"
+              rel="noopener"
+              >cuaderno de la figura</a
+            >). Tarifa, mínimos y gastos actualizados con el IPC desde 2016.
+            Estimación, no cifra oficial.
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            Hasta 2021 la diferencia es pequeña, porque los precios apenas
+            subían y la tarifa congelada se quedaba poco atrás. El salto llega
+            con la inflación de 2022, del 8,4&nbsp;%: desde entonces la franja
+            naranja se ensancha cada año. En 2024, el asalariado mediano paga
+            554&nbsp;€ más de lo que pagaría con la tarifa actualizada, y
+            1.805&nbsp;€ si se suman todos los años desde 2017. Para una familia
+            con dos sueldos y dos hijos, la diferencia llega a 1.612&nbsp;€ en
+            2024 y a 5.306&nbsp;€ en total.
+          </p>
+        </div>
+
+        <div class="read">
+          <p>
+            ¿Y en su caso? Elija su comunidad y mueva el deslizador hasta su
+            sueldo bruto de 2024. La calculadora lleva ese sueldo hacia atrás
+            con el IPC de la comunidad, como si cada año hubiera cobrado lo
+            mismo en poder de compra, y calcula el IRPF de 2015 a 2024 con la
+            tarifa real y con la tarifa actualizada. La tabla suma lo que habría
+            pagado con cada una.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig8">
+          <div class="fig-head">
+            <span class="fig-n">Figura 8</span>
+            <h3>Calcula tu caso</h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 8: calculadora del IRPF de 2015 a 2024 con la tarifa real y con la actualizada, por comunidad autónoma"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura8.png"
+          />
+          <div class="fig-live">
+            <!-- Gráfico generado con Python (Plotly): notebooks/TP_08MBID_figura8.ipynb -->
+            <iframe
+              title="Figura 8: calculadora del reparto de un sueldo bruto de 2024 con la tarifa real y con la tarifa actualizada"
+              src="figura8.html"
+              scrolling="no"
+              frameborder="0"
+              style="width: 100%; border: none"
+              height="660"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: elaboración propia con Python (Plotly) y el modelo fiscal
+            del repositorio (<a
+              href="https://github.com/sortaria24-max/08MBID_TrabajoPractico/blob/main/notebooks/TP_08MBID_figura8.ipynb"
+              target="_blank"
+              rel="noopener"
+              >cuaderno de la figura</a
+            >). Asalariado soltero, sin hijos ni otras rentas. La comunidad
+            cambia el IPC, no el impuesto: la escala autonómica se supone igual
+            a la estatal. No vale para el País Vasco ni Navarra, que tienen su
+            propio IRPF.
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            El salario mínimo también se mide contra el IRPF. El gráfico
+            siguiente compara, cada año, el SMI anual con el sueldo a partir del
+            cual un asalariado soltero empieza a pagar el impuesto. La zona gris
+            es el margen que le queda al SMI antes de tributar.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig9">
+          <div class="fig-head">
+            <span class="fig-n">Figura 9</span>
+            <h3>El salario mínimo y quienes empezaron a pagar IRPF</h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 9: salario mínimo anual y sueldo desde el que se paga IRPF, 2015-2024"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura9.png"
+          />
+          <div class="fig-live">
+            <iframe
+              title="Figura 9: salario mínimo anual y sueldo desde el que se paga IRPF, 2015-2024"
+              aria-label="Líneas"
+              id="datawrapper-chart-G6gXU"
+              src="https://datawrapper.dwcdn.net/G6gXU/1/"
+              scrolling="no"
+              frameborder="0"
+              style="width: 0; min-width: 100% !important; border: none"
+              height="440"
+              data-external="1"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: BOE (reales decretos del SMI de 2015 a 2024) y elaboración
+            propia con el modelo fiscal del repositorio. SMI en 14 pagas.
+            Asalariado soltero, sin otras rentas.
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            Entre 2015 y 2024 el SMI pasa de 9.080 a 15.876&nbsp;€ al año, un
+            75&nbsp;% más, con el gran salto de 2019. El umbral del IRPF también
+            sube, pero a golpes: se mueve cuando el Gobierno cambia la reducción
+            por rendimientos del trabajo, no con los precios. En 2022 el SMI se
+            queda a solo 5&nbsp;€ del umbral, y en 2023 lo supera: según nuestro
+            modelo, quien cobraba el salario mínimo pagaba 39&nbsp;€ de IRPF al
+            año. En 2024 el umbral se sube hasta dejar el SMI justo por debajo,
+            y vuelve a quedar exento.
+          </p>
+        </div>
+
+        <div class="read">
+          <p>
+            Para terminar, el cuadro de mando reúne en una sola pantalla las
+            piezas de la historia. Arriba, el salario medio, el mediano y la
+            variación del salario real del año y la comunidad elegidos. A la
+            izquierda, el mapa del poder de compra frente a 2008; a la derecha,
+            el sueldo frente a los precios, y abajo, el IRPF real frente al que
+            se pagaría con la tarifa actualizada. El año cambia el mapa y las
+            cifras; la comunidad, las cifras y las líneas, y el perfil, el
+            gráfico del IRPF.
+          </p>
+        </div>
+
+        <figure class="fig" id="fig10">
+          <div class="fig-head">
+            <span class="fig-n">Figura 10</span>
+            <h3>Cuadro de mando: la historia en una pantalla</h3>
+          </div>
+          <img
+            class="fig-img"
+            alt="Figura 10: cuadro de mando de salarios, precios e IRPF"
+            src="https://raw.githubusercontent.com/sortaria24-max/08MBID_TrabajoPractico/main/imagenes/figura10.png"
+          />
+          <div class="fig-live">
+            <iframe
+              title="Figura 10: cuadro de mando de salarios, precios e IRPF"
+              src="https://public.tableau.com/views/figura10_17929574305220/Dashboard1?:showVizHome=no&amp;:embed=y&amp;:language=es-ES&amp;:display_count=n&amp;:toolbar=bottom"
+              frameborder="0"
+              style="width: 100%; border: none"
+              height="880"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <figcaption>
+            Fuente: INE (tablas 28191 y 50913) y modelo fiscal del repositorio.
+            Elaboración propia con Tableau Public (<a
+              href="https://public.tableau.com/views/figura10_17929574305220/Dashboard1"
+              target="_blank"
+              rel="noopener"
+              >abrir a pantalla completa</a
+            >).
+          </figcaption>
+        </figure>
+
+        <div class="read">
+          <p>
+            Basta con mover el año para ver lo frágil que es la recuperación. En
+            2021 el salario medio compraba un 2,2&nbsp;% más que en 2008 y solo
+            una comunidad estaba por debajo. Un año después, con la inflación de
+            2022, el dato nacional cae al −1,8&nbsp;% y catorce comunidades
+            quedan en rojo. En 2024 el balance vuelve a ser positivo, pero
+            apenas: +1,1&nbsp;%, con siete comunidades todavía por debajo de
+            2008. Mientras tanto, la línea del IRPF real no deja de separarse de
+            la del IRPF con la tarifa actualizada.
+          </p>
+        </div>
+
+        <div class="read salto">
+          <h2>Conclusión</h2>
+          <p>
+            Dieciséis años de datos dejan una conclusión clara. Las empresas han
+            hecho su parte: entre 2008 y 2024 el sueldo mediano subió un
+            34,3&nbsp;% y los precios, un 33,5&nbsp;%. El sueldo bruto ha
+            seguido a la inflación.
+          </p>
+          <p>
+            Los tramos del IRPF, en cambio, no se han movido. Como los escalones
+            siguen en los mismos euros, cada subida de sueldo que solo compensa
+            los precios obliga a pagar un porcentaje mayor. Entre 2015 y 2024 el
+            IRPF del trabajador mediano pasó del 11,4&nbsp;% al 13,8&nbsp;% de su
+            sueldo, y lo que le llega a la cuenta creció un 22,0&nbsp;%, menos
+            que los precios (23,5&nbsp;%).
+            <strong>Ha perdido poder de compra sin que su sueldo haya
+            bajado.</strong>
+          </p>
+          <p>
+            No es una cantidad pequeña. Con los tramos actualizados, ese
+            trabajador habría pagado 554&nbsp;€ menos solo en 2024, y
+            1.805&nbsp;€ menos sumando todos los años desde 2017. Una familia
+            con dos sueldos y dos hijos se habría ahorrado 5.306&nbsp;€. Y el
+            golpe no es igual en todo el país: en siete comunidades, el sueldo
+            compra hoy menos que en 2008.
+          </p>
+          <p>
+            El sueldo no avanza, pero el impuesto sí. Actualizar cada año los
+            tramos con la inflación no supondría bajar impuestos: supondría
+            dejar de subirlos sin que nadie lo haya decidido.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== MÉTODO ===================== -->
+      <section id="metodo">
+        <div class="read">
+          <div class="sec-n">Método y herramientas</div>
+          <h2>Cómo se ha hecho</h2>
+          <p>
+            El trabajo se plantea como un reportaje de periodismo de datos: una
+            pregunta, unas pruebas y un recorrido hasta la respuesta. El formato
+            periodístico es una licencia narrativa para hacer la lectura más
+            ágil; se trata de un ejercicio académico y todo lo que se afirma se
+            apoya en los datos y el código del repositorio.
+          </p>
+          <h3 style="margin: 18px 0 8px">Selección de datos</h3>
+          <ul class="clean">
+            <li>
+              Salarios del INE (tabla 28191), serie homogénea 2008-2024, siempre
+              «Ambos sexos». La tabla incluye todas las jornadas y no permite
+              separar la parcial.
+            </li>
+            <li>
+              IPC del INE (tabla 50913): índice general, media anual de los doce
+              meses, por comunidad autónoma.
+            </li>
+            <li>
+              Distribución por múltiplos del SMI del INE (tabla 28182), con
+              jornada total y a tiempo completo.
+            </li>
+            <li>
+              Modelo 100 de la Agencia Tributaria: solo para contrastar el tipo
+              medio del IRPF. No incluye País Vasco, Navarra, Ceuta ni Melilla.
+            </li>
+          </ul>
+          <h3 style="margin: 18px 0 8px">El contribuyente tipo</h3>
+          <p>
+            Para calcular los impuestos usamos un asalariado del régimen
+            general, con contrato indefinido, sin otras rentas ni deducciones
+            personales. Solo restamos lo que la ley concede a cualquier
+            asalariado: la cotización a la Seguridad Social, 2.000 € de gastos
+            generales y la reducción por rendimientos del trabajo. No se
+            incluyen País Vasco ni Navarra, que tienen su propio régimen.
+          </p>
+          <h3 style="margin: 18px 0 8px">Límites</h3>
+          <ul class="clean">
+            <li>
+              La media y la mediana son de toda la población asalariada, no de
+              un puesto concreto.
+            </li>
+            <li>
+              El escenario «sin actualizar» es una estimación con supuestos
+              explícitos (índice IPC de 2016, escala autonómica igual a la
+              estatal).
+            </li>
+            <li>
+              El tipo medio de la Agencia Tributaria mezcla todo tipo de
+              declarantes: sirve para contrastar, no para demostrar.
+            </li>
+          </ul>
+        </div>
+
+        <div class="wide">
+          <h3 style="margin: 26px 0 6px">Herramientas utilizadas y por qué</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Herramienta</th>
+                <th>Figuras</th>
+                <th>Por qué se eligió</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Datawrapper</td>
+                <td>1, 3, 6, 9</td>
+                <td>
+                  Gráficos de línea, columnas y mapas con buen acabado, que se
+                  enlazan directamente a las tablas del repositorio y se
+                  publican como iframe interactivo sin programar.
+                </td>
+              </tr>
+              <tr>
+                <td>Python (Plotly)</td>
+                <td>2, 4, 5, 7, 8</td>
+                <td>
+                  Las figuras que dependen del modelo fiscal: el cálculo y el
+                  gráfico salen del mismo cuaderno, se pueden reproducir, y
+                  Plotly permite botones y deslizadores sin escribir JavaScript.
+                </td>
+              </tr>
+              <tr>
+                <td>Tableau Public</td>
+                <td>10</td>
+                <td>
+                  Un cuadro de mando con filtros que se publica en la web y que
+                  cualquier lector puede usar sin iniciar sesión.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Power BI es la herramienta que mejor conozco y la primera que pensé
+            usar para el mapa y el cuadro de mando. Al final no he hecho ninguna
+            visualización con ella: sin licencia de pago y con la publicación en
+            la web desactivada por la organización, el lector solo habría podido
+            ver una imagen fija, sin ninguna interactividad. En su lugar he
+            usado Tableau Public, su equivalente más directo, que sí permite
+            publicar el cuadro de mando abierto a cualquiera.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== DATOS Y FUENTES ===================== -->
+      <section id="datos" class="fuentes">
+        <div class="read">
+          <div class="sec-n">Datos y fuentes</div>
+          <h2>Todo se puede comprobar</h2>
+          <p>
+            Los datos originales, las tablas de trabajo, el cuaderno que explica
+            cada paso y el modelo fiscal están en un repositorio público.
+          </p>
+        </div>
+
+        <div class="links">
+          <a class="link" href="https://github.com/sortaria24-max/08MBID_TrabajoPractico" target="_blank" rel="noopener"
+            ><b>Repositorio en GitHub</b>Datos originales, tablas de trabajo, cuaderno y código<span class="cta">Abrir el repositorio ↗</span></a
+          >
+          <a class="link" href="https://colab.research.google.com/github/sortaria24-max/08MBID_TrabajoPractico/blob/main/notebooks/TP_08MBID_preparacion_datos.ipynb" target="_blank" rel="noopener"
+            ><b>Cuaderno de Colab</b>Selección, limpieza y transformación de los datos, paso a paso<span class="cta">Abrir el cuaderno en Colab ↗</span></a
+          >
+          <a class="link" href="https://github.com/sortaria24-max/08MBID_TrabajoPractico/blob/main/src/modelo_fiscal.py" target="_blank" rel="noopener"
+            ><b>Modelo fiscal (Python)</b>Cálculo de Seguridad Social e IRPF con pruebas<span class="cta">Ver el código del modelo ↗</span></a
+          >
+          <a class="link" href="https://stackblitz.com/edit/stackblitz-starters-czxtgejc?file=index.html" target="_blank" rel="noopener"
+            ><b>Esta web (StackBlitz)</b>Versión interactiva del trabajo<span class="cta">Abrir la web en StackBlitz ↗</span></a
+          >
+        </div>
+
+        <div class="wide">
+          <h3 style="margin: 22px 0 6px">Fuentes de los datos</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Dato</th>
+                <th>Origen</th>
+                <th>Enlace</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Salarios (media, mediana, percentiles)</td>
+                <td>INE · Encuesta Anual de Estructura Salarial</td>
+                <td>
+                  <a href="https://www.ine.es/jaxiT3/Datos.htm?t=28191" target="_blank" rel="noopener"
+                    >ine.es · tabla 28191</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Distribución salarial por múltiplos del SMI</td>
+                <td>INE · Encuesta Anual de Estructura Salarial</td>
+                <td>
+                  <a href="https://www.ine.es/jaxiT3/Datos.htm?t=28182" target="_blank" rel="noopener"
+                    >ine.es · tabla 28182</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>IPC, índice general por comunidad</td>
+                <td>INE · Índice de Precios de Consumo (base 2021)</td>
+                <td>
+                  <a href="https://www.ine.es/jaxiT3/Tabla.htm?t=50913" target="_blank" rel="noopener"
+                    >ine.es · tabla 50913</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Declaraciones del IRPF (Modelo 100)</td>
+                <td>Agencia Tributaria · Anuario estadístico</td>
+                <td>
+                  <a
+                    href="https://sede.agenciatributaria.gob.es/Sede/estadisticas/anuario-estadistico/acceso-descarga-masiva-datos.html" target="_blank" rel="noopener"
+                    >sede.agenciatributaria.gob.es · descarga masiva</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Normativa del IRPF</td>
+                <td>BOE · Ley 35/2006, de 28 de noviembre</td>
+                <td>
+                  <a
+                    href="https://www.boe.es/buscar/act.php?id=BOE-A-2006-20764" target="_blank" rel="noopener"
+                    >boe.es · Ley 35/2006</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        Trabajo práctico de la asignatura 08MBID · Visualización de Datos. «El
+        dato» es un nombre ficticio del formato periodístico de este ejercicio
+        académico y no corresponde a ningún medio real. Datos del INE y de la
+        Agencia Tributaria; elaboración propia.
+      </div>
+    </footer>
+
+    <script>
+      // Barra de progreso de lectura
+      const bar = document.getElementById('progress');
+      function progreso() {
+        const h = document.documentElement;
+        const t = h.scrollHeight - h.clientHeight;
+        bar.style.width = (t > 0 ? (h.scrollTop / t) * 100 : 0) + '%';
+      }
+      addEventListener('scroll', progreso, { passive: true });
+      progreso();
+
+      // Menú: resalta la sección visible
+      const enlaces = [...document.querySelectorAll('nav a[href^="#"]')];
+      const secciones = enlaces
+        .map((a) => document.querySelector(a.getAttribute('href')))
+        .filter(Boolean);
+      function marcar() {
+        let actual = secciones[0];
+        for (const s of secciones) {
+          if (s.getBoundingClientRect().top <= 90) actual = s;
+        }
+        enlaces.forEach((a) =>
+          a.classList.toggle('on', a.getAttribute('href') === '#' + actual.id)
+        );
+      }
+      addEventListener('scroll', marcar, { passive: true });
+      marcar();
+
+      // Imprimir en PDF
+      function imprimir() {
+        window.print();
+      }
+    </script>
+  </body>
+</html>
